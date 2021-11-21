@@ -1,0 +1,771 @@
+/api/admin/events:
+    get:
+        description: Route untuk mengambil seluruh event untuk admin
+        security:
+            - cookieAuth: []
+        parameters:
+          - in: query
+            name: name
+            schema:
+              type: string
+            description: the name of the event or organization or category.
+          - in: query
+            name: page[before]
+            schema:
+              type: integer
+            description: For pagination purposes, to go to the previous array of events. You can only use one between page[before] and page[after]. Put in the value of previous_cursor property of the last request to get the previous array of events
+          - in: query
+            name: page[after]
+            schema:
+              type: integer
+            description: For pagination purposes, to go to the next array of events. You can only use one between page[before] and page[after]. Put in the value of next_cursor property of the last request to get the next array of events
+        response:
+            200:
+                description: Mengembalikan events
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                message:
+                                    description: pesan berhasil
+                                    type: string
+                                data:
+                                  type: array
+                                  items:
+                                      type: object
+                                      properties:
+                                        id:
+                                          type: integer
+                                          format: int32
+                                          description: unique id of event
+                                        organizationId:
+                                          type: integer
+                                          format: int32
+                                          description: unique id of the organization that created the event
+                                        name:
+                                          type: string
+                                          description: name of the event
+                                        description:
+                                          type: string
+                                          description: description of the event
+                                        time:
+                                          type: string
+                                          description: The date of the event in ISO format. (UTC)
+                                          format: date-time
+                                        registerEnd:
+                                          type: string
+                                          description: The date of the registration deadline in ISO format. (UTC). If empty, the registration deadline is the same as time.
+                                          format: date-time
+                                        price:
+                                          type: integer
+                                          description: price of the event in integer ( 0 if free, 10000 if the price is Rp 10.000,- )
+                                          minimum: 0
+                                        organization:
+                                          type: object
+                                          description: the organization who created the event
+                                          properties: 
+                                            id: 
+                                              type: integer
+                                              format: int32
+                                            userId:
+                                              type: integer
+                                              format: int32
+                                            facultyId:
+                                              type: integer
+                                              format: int32
+                                            level:
+                                              type: string
+                                              enum: [university, faculty]
+                                            description:
+                                              type: string
+                                            line:
+                                              type: string
+                                            instagram:
+                                              type: string
+                                            whatsapp:
+                                              type: string
+                                            user:
+                                              type: object
+                                              properties:
+                                                name:
+                                                  type: string
+                                        categories:
+                                          type: array
+                                          description: the categories of the event
+                                          items:
+                                            type: object
+                                            properties:
+                                              id:
+                                                type: integer
+                                                format: int32
+                                              name:
+                                                type: string
+                            example:
+                              message: Event retrieved
+                              data:
+                                - id: 1
+                                  name: JavaScript Array and Objects
+                                  organizationId: 1
+                                  description: A JavaScript Competition
+                                  time: 2021-11-04T15:35:00.000Z
+                                  registerEnd: 2021-11-03T22:00:00.000Z
+                                  price: 0
+                                  organization: 
+                                    id: 1
+                                    userId: 2
+                                    facultyId: 1
+                                    level: faculty
+                                    description: Sebuah Kelompok Studi Mahasiswa yang memiliki peminatan di bidang Android dan Web Programming.
+                                    line: ksmandroid
+                                    instagram: androidupnvj
+                                    whatsapp: 081316472284
+                                    user:
+                                      name: KSM Android UPNVJ
+                                  categories:
+                                    - id: 1
+                                      name: workshop
+                                    - id: 2
+                                      name: webinar
+                                - id: 2
+                                  name: Matrix Competition
+                                  organizationId: 1
+                                  description: A Math Competition
+                                  time: 2021-11-04T15:35:00.000Z
+                                  registerEnd: 2021-11-03T22:00:00.000Z
+                                  price: 0
+                                  organization: 
+                                    id: 1
+                                    userId: 2
+                                    facultyId: 1
+                                    level: faculty
+                                    description: Sebuah Kelompok Studi Mahasiswa yang memiliki peminatan di bidang Android dan Web Programming.
+                                    line: ksmandroid
+                                    instagram: androidupnvj
+                                    whatsapp: 081316472284
+                                    user:
+                                      name: KSM Android UPNVJ
+                                  categories:
+                                    - id: 1
+                                      name: workshop
+            400:
+                description: Mengembalikan pesan gagal melakukan pengambilan
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                message:
+                                    description: pesan error
+                                    type: string
+                            example:
+                              message: Events cannot be retrieved
+                
+/api/admin/events/{id}:
+    get:
+        description: Route untuk mengambil event berdasarkan id
+        security:
+            - cookieAuth: []
+        parameters:
+            - name: id
+              in: path
+        responses:
+            200:
+                description: Mengembalikan event dengan parameter id
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                message:
+                                    description: pesan berhasil
+                                    type: string
+                                data:
+                                  type: object
+                                  properties:
+                                    id:
+                                      type: integer
+                                      format: int32
+                                      description: unique id of event
+                                    organizationId:
+                                      type: integer
+                                      format: int32
+                                      description: unique id of the organization that created the event
+                                    name:
+                                      type: string
+                                      description: name of the event
+                                    description:
+                                      type: string
+                                      description: description of the event
+                                    time:
+                                      type: string
+                                      description: The date of the event in ISO format. (UTC)
+                                      format: date-time
+                                    registerEnd:
+                                      type: string
+                                      description: The date of the registration deadline in ISO format. (UTC). If empty, the registration deadline is the same as time.
+                                      format: date-time
+                                    price:
+                                      type: integer
+                                      description: price of the event in integer ( 0 if free, 10000 if the price is Rp 10.000,- )
+                                      minimum: 0
+                                    organization:
+                                      type: object
+                                      description: the organization who created the event
+                                      properties: 
+                                        id: 
+                                          type: integer
+                                          format: int32
+                                        userId:
+                                          type: integer
+                                          format: int32
+                                        facultyId:
+                                          type: integer
+                                          format: int32
+                                        level:
+                                          type: string
+                                          enum: [university, faculty]
+                                        description:
+                                          type: string
+                                        line:
+                                          type: string
+                                        instagram:
+                                          type: string
+                                        whatsapp:
+                                          type: string
+                                        user:
+                                          type: object
+                                          properties:
+                                            name:
+                                              type: string
+                                    categories:
+                                      type: array
+                                      description: the categories of the event
+                                      items:
+                                        type: object
+                                        properties:
+                                          id:
+                                            type: integer
+                                            format: int32
+                                          name:
+                                            type: string
+                                    images:
+                                      type: array
+                                      description: the images of the event
+                                      items:
+                                        type: object
+                                        properties:
+                                          id:
+                                            type: integer
+                                            format: int32
+                                          eventId:
+                                            type: integer
+                                            format: int32
+                                          image:
+                                            type: string
+                                          thumbnail:
+                                            type: string
+                                    cover:
+                                        type: object
+                                        properties:
+                                            eventId:
+                                                type: integer
+                                                format: int32
+                                            imageId:
+                                                type: integer
+                                                format: int32
+                                            image:
+                                                type: object
+                                                properties:
+                                                    eventId:
+                                                        type: integer
+                                                        format: int32
+                                                    imageId:
+                                                        type: integer
+                                                        format: int32
+                                                    image:
+                                                        type: object
+                                                        properties:
+                                                            id:
+                                                                type: integer
+                                                                format: int32
+                                                            eventId:
+                                                                type: integer
+                                                                format: int32
+                                                            image:
+                                                                type: string
+                                                            thumbnail:
+                                                                type: string
+                                    _count: 
+                                      type: object
+                                      description: the total views and registered students for the event
+                                      properties:
+                                        registers:
+                                          type: integer
+                                          minimum: 0
+                                        views:
+                                          type: integer
+                                          minimum: 0
+                            example:
+                              message: Event retrieved
+                              data:
+                                id: 1
+                                name: JavaScript Array and Objects
+                                organizationId: 1
+                                description: A JavaScript Competition
+                                time: 2021-11-04T15:35:00.000Z
+                                registerEnd: 2021-11-03T22:00:00.000Z
+                                price: 0
+                                organization: 
+                                  id: 1
+                                  userId: 2
+                                  facultyId: 1
+                                  level: faculty
+                                  description: Sebuah Kelompok Studi Mahasiswa yang memiliki peminatan di bidang Android dan Web Programming.
+                                  line: ksmandroid
+                                  instagram: androidupnvj
+                                  whatsapp: 081316472284
+                                  user:
+                                    name: KSM Android UPNVJ
+                                categories:
+                                  - id: 1
+                                    name: workshop
+                                  - id: 2
+                                    name: webinar
+                                images:
+                                  - id: 1
+                                    eventId: 1
+                                    image: events/images-1635858761578-461476216.png
+                                    thumbnail: null
+                                  - id: 2
+                                    eventId: 1
+                                    image: events/images-1635858761559-948574326.png
+                                    thumbnail: null
+                                  - id: 3
+                                    eventId: 1
+                                    image: events/images-1635858761582-122274710.png
+                                    thumbnail: null
+                                cover:
+                                    eventId: 1
+                                    imageId: 3
+                                    image:
+                                        id: 3
+                                        eventId: 1
+                                        image: events/images-1635858761582-122274710.png
+                                        thumbnail: null
+                                _count:
+                                  registers: 8
+                                  views: 24
+            400:
+                description: Mengembalikan pesan gagal melakukan pengambilan
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                message:
+                                    description: pesan error
+                                    type: string
+                            example:
+                              message: Event cannot be retrieved
+            404:
+                description: Mengembalikan pesan tidak menemukan event dari id yang di request
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                message:
+                                    description: pesan error
+                                    type: string
+                            example:
+                              message: Event not found
+    put:
+        description: Route untuk admin mengupdate event berdasarkan ID
+        security:
+            - cookieAuth: []
+        parameters:
+            - name: id
+              in: path
+        requestBody:
+            content:
+                application/json:
+                    schema:
+                        type: object
+                        required: ['name','time','description','price','categories']
+                        properties:
+                            name:
+                              type: string
+                              description: name of the event
+                            description:
+                              type: string
+                              description: description of the event
+                            time:
+                              type: string
+                              description: The date of the event in ISO format. (UTC)
+                              format: date-time
+                            registerEnd:
+                              type: string
+                              description: The date of the registration deadline in ISO format. (UTC). If empty, the registration deadline is the same as time.
+                              format: date-time
+                            price:
+                              type: integer
+                              description: price of the event in integer ( 0 if free, 10000 if the price is Rp 10.000,- )
+                              minimum: 0
+                            categories:
+                              type: array
+                              description: the categories of the event
+                              items:
+                                type: integer
+                                description: must be valid id of available categories. in array form e.g [1,2,4] or [1] or ["1","2"]
+                        example:
+                            name: Omae wa mou shindeiru
+                            description: Acara yang kurang bermanfaat
+                            time: 2021-11-05T07:35:00.000Z
+                            registerEnd: 2021-11-03T22:00:00.000Z
+                            price: 50000
+                            categories: [1,2,4]
+        responses:
+            200:
+                description: Mengembalikan pesan event berhasil diupdate
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                message:
+                                    description: pesan sukses
+                                    type: string
+                                data:
+                                    type: object
+                                    properties:
+                                      id:
+                                        type: integer
+                                        format: int32
+                                        description: unique id of event
+                                      organizationId:
+                                        type: integer
+                                        format: int32
+                                        description: unique id of the organization that created the event
+                                      name:
+                                        type: string
+                                        description: name of the event
+                                      description:
+                                        type: string
+                                        description: description of the event
+                                      time:
+                                        type: string
+                                        description: The date of the event in ISO format. (UTC)
+                                        format: date-time
+                                      registerEnd:
+                                        type: string
+                                        description: The date of the registration deadline in ISO format. (UTC). If empty, the registration deadline is the same as time.
+                                        format: date-time
+                                      price:
+                                        type: integer
+                                        description: price of the event in integer ( 0 if free, 10000 if the price is Rp 10.000,- )
+                                        minimum: 0
+                                      organization:
+                                        type: object
+                                        description: the organization who created the event
+                                        properties: 
+                                          id: 
+                                            type: integer
+                                            format: int32
+                                          userId:
+                                            type: integer
+                                            format: int32
+                                          facultyId:
+                                            type: integer
+                                            format: int32
+                                          level:
+                                            type: string
+                                            enum: [university, faculty]
+                                          description:
+                                            type: string
+                                          line:
+                                            type: string
+                                          instagram:
+                                            type: string
+                                          whatsapp:
+                                            type: string
+                                          user:
+                                            type: object
+                                            properties:
+                                              name:
+                                                type: string
+                                      categories:
+                                        type: array
+                                        description: the categories of the event
+                                        items:
+                                          type: object
+                                          properties:
+                                            id:
+                                              type: integer
+                                              format: int32
+                                            name:
+                                              type: string
+                            example:
+                                message: Event updated
+                                data:
+                                  id: 15
+                                  name: Omae wa mou shindeiru
+                                  organizationId: 1
+                                  description: Acara yang sangat bermanfaat dan bersifat wajib bagi seluruh mahasiswa UPN Veteran Jakarta
+                                  time: 2021-11-05T07:35:00.000Z
+                                  registerEnd: 2021-11-03T22:00:00.000Z
+                                  price: 50000
+                                  organization: 
+                                    id: 1
+                                    userId: 2
+                                    facultyId: 1
+                                    level: faculty
+                                    description: Sebuah Kelompok Studi Mahasiswa yang memiliki peminatan di bidang Android dan Web Programming.
+                                    line: ksmandroid
+                                    instagram: androidupnvj
+                                    whatsapp: 081316472284
+                                    user:
+                                      name: KSM Android UPNVJ
+                                  categories:
+                                    - id: 4
+                                      name: formal
+            400:
+                description: Mengembalikan pesan error jika ada error di validasi atau error mengupdate event
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                message:
+                                    description: pesan error
+                                    type: string
+                            example:
+                                message: time must be in YYYY-MM-DDTHH:mm format
+            404:
+                description: Mengembalikan pesan error jika tidak ada event dengan parameter id yang diberikan 
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                message:
+                                    description: pesan error
+                                    type: string
+                            example:
+                                message: Event not found
+    delete:
+        description: Route untuk ormawa menghapus event miliknya
+        security:
+            - cookieAuth: []
+        parameters:
+            - name: id
+              in: path
+        responses:
+            200:
+                description: Mengembalikan pesan event berhasil di delete
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                message:
+                                    description: pesan sukses
+                                    type: string
+                                data:
+                                    type: object
+                                    properties:
+                                      id:
+                                        type: integer
+                                        format: int32
+                                        description: unique id of event
+                                      organizationId:
+                                        type: integer
+                                        format: int32
+                                        description: unique id of the organization that created the event
+                                      name:
+                                        type: string
+                                        description: name of the event
+                                      description:
+                                        type: string
+                                        description: description of the event
+                                      time:
+                                        type: string
+                                        description: The date of the event in ISO format. (UTC)
+                                        format: date-time
+                                      registerEnd:
+                                        type: string
+                                        description: The date of the registration deadline in ISO format. (UTC). If empty, the registration deadline is the same as time.
+                                        format: date-time
+                                      price:
+                                        type: integer
+                                        description: price of the event in integer ( 0 if free, 10000 if the price is Rp 10.000,- )
+                                        minimum: 0
+                                      organization:
+                                        type: object
+                                        description: the organization who created the event
+                                        properties: 
+                                          id: 
+                                            type: integer
+                                            format: int32
+                                          userId:
+                                            type: integer
+                                            format: int32
+                                          facultyId:
+                                            type: integer
+                                            format: int32
+                                          level:
+                                            type: string
+                                            enum: [university, faculty]
+                                          description:
+                                            type: string
+                                          line:
+                                            type: string
+                                          instagram:
+                                            type: string
+                                          whatsapp:
+                                            type: string
+                                          user:
+                                            type: object
+                                            properties:
+                                              name:
+                                                type: string
+                                      categories:
+                                        type: array
+                                        description: the categories of the event
+                                        items:
+                                          type: object
+                                          properties:
+                                            id:
+                                              type: integer
+                                              format: int32
+                                            name:
+                                              type: string
+                                      images:
+                                          type: array
+                                          description: the images of the event
+                                          items:
+                                              type: object
+                                              properties:
+                                                  id:
+                                                      type: integer
+                                                      format: int32
+                                                  eventId:
+                                                      type: integer
+                                                      format: int32
+                                                  image:
+                                                      type: string
+                                                  thumbnail:
+                                                      type: string
+                                      cover:
+                                          type: object
+                                          properties:
+                                              eventId:
+                                                  type: integer
+                                                  format: int32
+                                              imageId:
+                                                  type: integer
+                                                  format: int32
+                                              image:
+                                                  type: object
+                                                  properties:
+                                                      eventId:
+                                                          type: integer
+                                                          format: int32
+                                                      imageId:
+                                                          type: integer
+                                                          format: int32
+                                                      image:
+                                                          type: object
+                                                          properties:
+                                                              id:
+                                                                  type: integer
+                                                                  format: int32
+                                                              eventId:
+                                                                  type: integer
+                                                                  format: int32
+                                                              image:
+                                                                  type: string
+                                                              thumbnail:
+                                                                  type: string   
+                                      _count: 
+                                          type: object
+                                          description: the total views and registered students for the event
+                                          properties:
+                                            registers:
+                                              type: integer
+                                              minimum: 0
+                                            views:
+                                              type: integer
+                                              minimum: 0
+                            example:
+                                message: Event deleted
+                                data:
+                                  id: 15
+                                  name: Omae wa mou shindeiru
+                                  organizationId: 1
+                                  description: Acara yang sangat bermanfaat dan bersifat wajib bagi seluruh mahasiswa UPN Veteran Jakarta
+                                  time: 2021-11-05T07:35:00.000Z
+                                  registerEnd: 2021-11-03T22:00:00.000Z
+                                  price: 50000
+                                  organization: 
+                                    id: 1
+                                    userId: 2
+                                    facultyId: 1
+                                    level: faculty
+                                    description: Sebuah Kelompok Studi Mahasiswa yang memiliki peminatan di bidang Android dan Web Programming.
+                                    line: ksmandroid
+                                    instagram: androidupnvj
+                                    whatsapp: 081316472284
+                                    user:
+                                      name: KSM Android UPNVJ
+                                  categories:
+                                    - id: 4
+                                      name: formal
+                                  images:
+                                    - id: 1
+                                      eventId: 1
+                                      image: events/images-1635858761578-461476216.png
+                                      thumbnail: null
+                                    - id: 2
+                                      eventId: 1
+                                      image: events/images-1635858761559-948574326.png
+                                      thumbnail: null
+                                    - id: 3
+                                      eventId: 1
+                                      image: events/images-1635858761582-122274710.png
+                                      thumbnail: null
+                                  cover: 
+                                      eventId: 1
+                                      imageId: 3
+                                      image:
+                                          id: 3
+                                          eventId: 1
+                                          image: events/images-1635858761582-122274710.png
+                                          thumbnail: null
+                                  _count:
+                                    registers: 8
+                                    views: 24
+            400:
+                description: Mengembalikan pesan error jika ada kesalahan dalam mendelete pada server
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                message:
+                                    description: pesan error
+                                    type: string
+                            example:
+                              message: Event delete failed. Check if the event belongs to your organization
+            404:
+                description: Mengembalikan pesan tidak menemukan event dari id yang di request
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                message:
+                                    description: pesan error
+                                    type: string
+                                example:
+                                  message: Event not found

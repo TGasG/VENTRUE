@@ -1,0 +1,147 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  admin
+  organization
+  user
+}
+
+enum Level {
+  faculty
+  university
+}
+
+model User {
+  id           Int           @id @default(autoincrement())
+  name         String        @db.VarChar(255)
+  email        String        @unique @db.VarChar(255)
+  role         Role
+  password     String        @db.VarChar(255)
+  phone        String?       @unique @db.Char(14)
+  picture      String?       @db.VarChar(255)
+  student      Student?
+  organization Organization?
+}
+
+model Student {
+  id        Int        @id @default(autoincrement())
+  userId    Int        @unique
+  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  facultyId Int
+  faculty   Faculty    @relation(fields: [facultyId], references: [id], onDelete: Cascade)
+  nim       String     @unique @db.Char(10)
+  line      String?    @unique @db.VarChar(255)
+  instagram String?    @unique @db.VarChar(255)
+  whatsapp  String?    @unique @db.VarChar(255)
+  views     View[]
+  registers Register[]
+  wishlists Wishlist[]
+}
+
+model Organization {
+  id          Int      @id @default(autoincrement())
+  userId      Int      @unique
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  facultyId   Int?
+  faculty     Faculty? @relation(fields: [facultyId], references: [id], onDelete: Cascade)
+  level       Level
+  description String?
+  line        String?  @unique @db.VarChar(255)
+  instagram   String?  @unique @db.VarChar(255)
+  whatsapp    String?  @unique @db.VarChar(255)
+  events      Event[]
+}
+
+model Faculty {
+  id            Int            @id @default(autoincrement())
+  name          String         @db.VarChar(255)
+  students      Student[]
+  organizations Organization[]
+}
+
+model Event {
+  id             Int          @id @default(autoincrement())
+  organizationId Int
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  name           String       @db.VarChar(255)
+  description    String?
+  time           DateTime
+  registerEnd    DateTime?
+  price          Int          @default(0)
+  views          View[]
+  registers      Register[]
+  wishlists      Wishlist[]
+  images         Image[]
+  categories     Category[]
+  banners        Banner[]
+  cover          CoverImage?
+}
+
+model View {
+  studentId Int
+  student   Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  eventId   Int
+  event     Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  viewAt    DateTime @default(now())
+
+  @@id([studentId, eventId])
+}
+
+model Register {
+  studentId  Int
+  student    Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  eventId    Int
+  event      Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  registerAt DateTime @default(now())
+
+  @@id([studentId, eventId])
+}
+
+model Wishlist {
+  studentId Int
+  student   Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  eventId   Int
+  event     Event   @relation(fields: [eventId], references: [id], onDelete: Cascade)
+
+  @@id([studentId, eventId])
+}
+
+model Image {
+  id        Int         @id @default(autoincrement())
+  eventId   Int
+  event     Event       @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  image     String      @db.VarChar(255)
+  thumbnail String?     @db.VarChar(255)
+  cover     CoverImage?
+
+}
+
+model CoverImage {
+  eventId Int   @id
+  event   Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  imageId Int   @unique
+  image   Image @relation(fields: [imageId], references: [id], onDelete: Cascade)
+}
+
+model Category {
+  id     Int     @id @default(autoincrement())
+  name   String  @db.VarChar(255)
+  events Event[]
+}
+
+model Banner {
+  id      Int    @id @default(autoincrement())
+  eventId Int?
+  event   Event? @relation(fields: [eventId], references: [id], onDelete: SetNull)
+  order   Int    @unique
+}

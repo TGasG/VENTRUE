@@ -1,0 +1,1085 @@
+components:
+    securitySchemes:
+        cookieAuth:
+            type: apiKey
+            in: cookie
+            name: JSESSIONID
+
+/api/user:
+    get:
+        description: Route untuk mengambil data user yang sedang terautentikasi sekarang
+        security:
+            - cookieAuth: []
+        responses:
+            200:
+                description: Mengembalikan user yang terautentikasi sekarang
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                id:
+                                    description: user id
+                                    type: integer
+                                    format: int32
+                                name:
+                                    description: nama user
+                                    type: string
+                                email:
+                                    description: email user
+                                    type: string
+                                role:
+                                    description: role user (admin / organization / user)
+                                    type: string
+                                phone:
+                                    description: nomor telepon user
+                                    type: string
+                                picture:
+                                    description: url menunjuk profile picture user
+                                    type: string
+                                createdAt:
+                                    description: tanggal kapan user dibuat
+                                    type: string
+                                updatedAt:
+                                    description: tanggal kapan user terakhir di update
+                                    type: string
+                                student:
+                                    description: Atribut tambahan jika user adalah student
+                                    type: object
+                                    properties:
+                                        id:
+                                            description: id student
+                                            type: integer
+                                            format: int32
+                                        userId:
+                                            description: id relasi user
+                                            type: integer
+                                            format: int32
+                                        facultyId:
+                                            description: id relasi faculty
+                                            type: integer
+                                            format: int32
+                                        nim:
+                                            description: nomor induk mahasiswa
+                                            type: string
+                                        line:
+                                            description: kontak media sosial line user
+                                            type: string
+                                        instagram:
+                                            description: kontak media sosial instagram user
+                                            type: string
+                                        whatsapp:
+                                            description: nomor kontak whatsapp
+                                            type: string
+                                        createdAt:
+                                            description: tanggal kapan student dibuat
+                                            type: string
+                                        updatedAt:
+                                            description: tanggal kapan student terakhir di update
+                                            type: string
+                                        faculty:
+                                            description: fakultas mahasiswa
+                                            type: object
+                                            properties:
+                                                id:
+                                                    description: id faculty
+                                                    type: integer
+                                                    format: int32
+                                                name:
+                                                    description: nama fakultas
+                                                    type: string
+                                                createdAt:
+                                                    description: tanggal faculty dibuat
+                                                    type: string
+                                                updatedAt:
+                                                    description: tanggal faculty terakhir di update
+                                                    type: string
+                                organization:
+                                    description: Atribut tambahan jika user adalah ormawa
+                                    type: object
+                                    properties:
+                                        id:
+                                            description: id organization
+                                            type: integer
+                                            format: int32
+                                        userId:
+                                            description: id relasi user
+                                            type: integer
+                                            format: int32
+                                        facultyId:
+                                            description: id relasi faculty
+                                            type: integer
+                                            format: int32
+                                        level:
+                                            description: tingkatan ormawa
+                                            type: string
+                                        description:
+                                            description: deskripsi ormawa
+                                            type: string
+                                        whatsapp:
+                                            description: nomor kontak whatsapp
+                                            type: string
+                                        instagram:
+                                            description: kontak media sosial instagram ormawa
+                                            type: string
+                                        line:
+                                            description: kontak media sosial line ormawa
+                                            type: string
+                                        createdAt:
+                                            description: tanggal organization dibuat
+                                            type: string
+                                        updatedAt:
+                                            description: tanggal organization terakhir di update
+                                            type: string
+                                        faculty:
+                                            description: fakultas ormawa
+                                            type: object
+                                            properties:
+                                                id:
+                                                    description: id faculty
+                                                    type: integer
+                                                    format: int32
+                                                name:
+                                                    description: nama fakultas
+                                                    type: string
+                                                createdAt:
+                                                    description: tanggal faculty dibuat
+                                                    type: string
+                                                updatedAt:
+                                                    description: tanggal fa terakhir di update
+                                                    type: string
+            403:
+                description: Mengembalikan pesan error ketika user tidak terautentikasi
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                message:
+                                    description: pesan error
+                                    type: string
+    put:
+        description: Route untuk mengupdate user yang sedang terautentikasi sekarang
+        security:
+            - cookieAuth: []
+        requestBody:
+            content:
+                application/json:
+                    schema:
+                        type: object
+                        properties:
+                            name:
+                                description: nama user
+                                type: string
+                            email:
+                                description: email user
+                                type: string
+                            phone:
+                                description: nomor telepon user
+                                type: string
+                            password:
+                                description: password lama user jika ingin mengubah password
+                                type: string
+                            newPassword:
+                                description: password baru user
+                                type: string
+                            repeatPassword:
+                                description: password ulangin password baru user
+                                type: string
+                            facultyId:
+                                description: id relasi faculty
+                                type: integer
+                                format: int32
+                            nim:
+                                description: nomor induk mahasiswa
+                                type: string
+                            line:
+                                description: kontak media sosial line user
+                                type: string
+                            instagram:
+                                description: kontak media sosial instagram user
+                                type: string
+                            whatsapp:
+                                description: nomor kontak whatsapp
+                                type: string
+                            level:
+                                description: tingkatan ormawa
+                                type: string
+                            description:
+                                description: deskripsi ormawa
+                                type: string
+        responses:
+            200:
+                description: Mengembalikan pesan berhasil ketika user diupdate
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                message:
+                                    description: pesan sukses
+                                    type: string
+            400:
+                description: Mengembalikan pesan error ketika terjadi kesalahan dalam validasi data
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                message:
+                                    description: pesan error
+                                    type: string
+            401:
+                description: Mengembalikan pesan error ketika password yang di input salah
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                message:
+                                    description: pesan error
+                                    type: string
+            403:
+                description: Mengembalikan pesan error ketika user tidak terautentikasi
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                message:
+                                    description: pesan error
+                                    type: string
+            500:
+                description: Mengembalikan pesan error jika terjadi error yang tidak terduga
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                message:
+                                    description: pesan error
+                                    type: string
+    delete:
+        description: Route untuk mendelete akun user yang sedang terautentikasi sekarang
+        security:
+            - cookieAuth: []
+        requestBody:
+            content:
+                application/json:
+                    schema:
+                        type: object
+                        required: ['password']
+                        properties:
+                            password:
+                                description: konfirmasi password user
+                                type: string
+        responses:
+            200:
+                description: Mengembalikan pesan berhasil ketika user dihapus
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                message:
+                                    description: pesan sukses
+                                    type: string
+            401:
+                description: Mengembalikan pesan error ketika password yang di input salah
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                message:
+                                    description: pesan error
+                                    type: string
+            403:
+                description: Mengembalikan pesan error ketika user tidak terautentikasi
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                message:
+                                    description: pesan error
+                                    type: string
+            500:
+                description: Mengembalikan pesan error jika terjadi error yang tidak terduga
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                message:
+                                    description: pesan error
+                                    type: string
+
+/api/user/all:
+    get:
+        description: Route admin mengambil semua users
+        security:
+            - cookieAuth: []
+        parameters:
+            - name: skip
+              description: Berapa banyak record yang mau di skip
+              in: query
+              schema:
+                  type: integer
+                  format: int32
+            - name: take
+              description: Berapa banyak data yang mau diambil
+              in: query
+              schema:
+                  type: integer
+                  format: int32
+        responses:
+            200:
+                content:
+                    application/json:
+                        schema:
+                            type: array
+                            items:
+                                type: object
+                                properties:
+                                    id:
+                                        description: user id
+                                        type: integer
+                                        format: int32
+                                    name:
+                                        description: nama user
+                                        type: string
+                                    email:
+                                        description: email user
+                                        type: string
+                                    role:
+                                        description: role user (admin / organization / user)
+                                        type: string
+                                    phone:
+                                        description: nomor telepon user
+                                        type: string
+                                    picture:
+                                        description: url menunjuk profile picture user
+                                        type: string
+                                    createdAt:
+                                        description: tanggal kapan user dibuat
+                                        type: string
+                                    updatedAt:
+                                        description: tanggal kapan user terakhir di update
+                                        type: string
+                                    student:
+                                        description: Atribut tambahan jika user adalah student
+                                        type: object
+                                        properties:
+                                            id:
+                                                description: id student
+                                                type: integer
+                                                format: int32
+                                            userId:
+                                                description: id relasi user
+                                                type: integer
+                                                format: int32
+                                            facultyId:
+                                                description: id relasi faculty
+                                                type: integer
+                                                format: int32
+                                            nim:
+                                                description: nomor induk mahasiswa
+                                                type: string
+                                            line:
+                                                description: kontak media sosial line user
+                                                type: string
+                                            instagram:
+                                                description: kontak media sosial instagram user
+                                                type: string
+                                            whatsapp:
+                                                description: nomor kontak whatsapp
+                                                type: string
+                                            createdAt:
+                                                description: tanggal kapan student dibuat
+                                                type: string
+                                            updatedAt:
+                                                description: tanggal kapan student terakhir di update
+                                                type: string
+                                            faculty:
+                                                description: fakultas mahasiswa
+                                                type: object
+                                                properties:
+                                                    id:
+                                                        description: id faculty
+                                                        type: integer
+                                                        format: int32
+                                                    name:
+                                                        description: nama fakultas
+                                                        type: string
+                                                    createdAt:
+                                                        description: tanggal faculty dibuat
+                                                        type: string
+                                                    updatedAt:
+                                                        description: tanggal faculty terakhir di update
+                                                        type: string
+                                    organization:
+                                        description: Atribut tambahan jika user adalah ormawa
+                                        type: object
+                                        properties:
+                                            id:
+                                                description: id organization
+                                                type: integer
+                                                format: int32
+                                            userId:
+                                                description: id relasi user
+                                                type: integer
+                                                format: int32
+                                            facultyId:
+                                                description: id relasi faculty
+                                                type: integer
+                                                format: int32
+                                            level:
+                                                description: tingkatan ormawa
+                                                type: string
+                                            description:
+                                                description: deskripsi ormawa
+                                                type: string
+                                            whatsapp:
+                                                description: nomor kontak whatsapp
+                                                type: string
+                                            instagram:
+                                                description: kontak media sosial instagram ormawa
+                                                type: string
+                                            line:
+                                                description: kontak media sosial line ormawa
+                                                type: string
+                                            createdAt:
+                                                description: tanggal organization dibuat
+                                                type: string
+                                            updatedAt:
+                                                description: tanggal organization terakhir di update
+                                                type: string
+                                            faculty:
+                                                description: fakultas ormawa
+                                                type: object
+                                                properties:
+                                                    id:
+                                                        description: id faculty
+                                                        type: integer
+                                                        format: int32
+                                                    name:
+                                                        description: nama fakultas
+                                                        type: string
+                                                    createdAt:
+                                                        description: tanggal faculty dibuat
+                                                        type: string
+                                                    updatedAt:
+                                                        description: tanggal fa terakhir di update
+                                                        type: string
+            403:
+                description: Mengembalikan pesan error ketika user tidak terautentikasi atau tidak memiliki izin
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                message:
+                                    description: pesan error
+                                    type: string
+            500:
+                description: Mengembalikan pesan error jika terjadi error yang tidak terduga
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                message:
+                                    description: pesan error
+                                    type: string
+
+/api/user/{id}:
+    get:
+        description: Route untuk membuka profile user berdasarkan parameter id
+        parameters:
+            - name: id
+              description: id user yang ingin dihapus
+              in: path
+              required: true
+        responses:
+            200:
+                description: Mengembalikan user yang terautentikasi sekarang
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                id:
+                                    description: user id
+                                    type: integer
+                                    format: int32
+                                name:
+                                    description: nama user
+                                    type: string
+                                email:
+                                    description: email user
+                                    type: string
+                                role:
+                                    description: role user (admin / organization / user)
+                                    type: string
+                                phone:
+                                    description: nomor telepon user
+                                    type: string
+                                picture:
+                                    description: url menunjuk profile picture user
+                                    type: string
+                                createdAt:
+                                    description: tanggal kapan user dibuat
+                                    type: string
+                                updatedAt:
+                                    description: tanggal kapan user terakhir di update
+                                    type: string
+                                student:
+                                    description: Atribut tambahan jika user adalah student
+                                    type: object
+                                    properties:
+                                        id:
+                                            description: id student
+                                            type: integer
+                                            format: int32
+                                        userId:
+                                            description: id relasi user
+                                            type: integer
+                                            format: int32
+                                        facultyId:
+                                            description: id relasi faculty
+                                            type: integer
+                                            format: int32
+                                        nim:
+                                            description: nomor induk mahasiswa
+                                            type: string
+                                        line:
+                                            description: kontak media sosial line user
+                                            type: string
+                                        instagram:
+                                            description: kontak media sosial instagram user
+                                            type: string
+                                        whatsapp:
+                                            description: nomor kontak whatsapp
+                                            type: string
+                                        createdAt:
+                                            description: tanggal kapan student dibuat
+                                            type: string
+                                        updatedAt:
+                                            description: tanggal kapan student terakhir di update
+                                            type: string
+                                        faculty:
+                                            description: fakultas mahasiswa
+                                            type: object
+                                            properties:
+                                                id:
+                                                    description: id faculty
+                                                    type: integer
+                                                    format: int32
+                                                name:
+                                                    description: nama fakultas
+                                                    type: string
+                                                createdAt:
+                                                    description: tanggal faculty dibuat
+                                                    type: string
+                                                updatedAt:
+                                                    description: tanggal faculty terakhir di update
+                                                    type: string
+                                organization:
+                                    description: Atribut tambahan jika user adalah ormawa
+                                    type: object
+                                    properties:
+                                        id:
+                                            description: id organization
+                                            type: integer
+                                            format: int32
+                                        userId:
+                                            description: id relasi user
+                                            type: integer
+                                            format: int32
+                                        facultyId:
+                                            description: id relasi faculty
+                                            type: integer
+                                            format: int32
+                                        level:
+                                            description: tingkatan ormawa
+                                            type: string
+                                        description:
+                                            description: deskripsi ormawa
+                                            type: string
+                                        whatsapp:
+                                            description: nomor kontak whatsapp
+                                            type: string
+                                        instagram:
+                                            description: kontak media sosial instagram ormawa
+                                            type: string
+                                        line:
+                                            description: kontak media sosial line ormawa
+                                            type: string
+                                        createdAt:
+                                            description: tanggal organization dibuat
+                                            type: string
+                                        updatedAt:
+                                            description: tanggal organization terakhir di update
+                                            type: string
+                                        faculty:
+                                            description: fakultas ormawa
+                                            type: object
+                                            properties:
+                                                id:
+                                                    description: id faculty
+                                                    type: integer
+                                                    format: int32
+                                                name:
+                                                    description: nama fakultas
+                                                    type: string
+                                                createdAt:
+                                                    description: tanggal faculty dibuat
+                                                    type: string
+                                                updatedAt:
+                                                    description: tanggal fa terakhir di update
+                                                    type: string
+            400:
+                description: Mengembalikan pesan error ketika parameter tidak valid
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                message:
+                                    description: pesan error
+                                    type: string
+            404:
+                description: Mengembalikan pesan error ketika user tidak ditemukan
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                message:
+                                    description: pesan error
+                                    type: string
+            500:
+                description: Mengembalikan pesan error jika terjadi error yang tidak terduga
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                message:
+                                    description: pesan error
+                                    type: string
+    put:
+        description: Route untuk admin men-update user lain
+        security:
+            - cookieAuth: []
+        parameters:
+            - name: id
+              description: id user yang ingin dihapus
+              in: path
+              required: true
+        requestBody:
+            content:
+                application/json:
+                    schema:
+                        type: object
+                        properties:
+                            name:
+                                description: nama user
+                                type: string
+                            email:
+                                description: email user
+                                type: string
+                            password:
+                                description: password baru user jika admin mau mengubah password
+                                type: string
+                            phone:
+                                description: nomor telepon user
+                                type: string
+                            facultyId:
+                                description: id relasi faculty
+                                type: integer
+                                format: int32
+                            nim:
+                                description: nomor induk mahasiswa
+                                type: string
+                            line:
+                                description: kontak media sosial line user
+                                type: string
+                            instagram:
+                                description: kontak media sosial instagram user
+                                type: string
+                            whatsapp:
+                                description: nomor kontak whatsapp
+                                type: string
+                            level:
+                                description: tingkatan ormawa
+                                type: string
+                            description:
+                                description: deskripsi ormawa
+                                type: string
+        responses:
+            200:
+                description: Mengembalikan pesan berhasil ketika user diupdate
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                message:
+                                    description: pesan sukses
+                                    type: string
+            400:
+                description: Mengembalikan pesan error ketika terjadi kesalahan dalam validasi data
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                message:
+                                    description: pesan error
+                                    type: string
+            403:
+                description: Mengembalikan pesan error ketika user tidak terautentikasi
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                message:
+                                    description: pesan error
+                                    type: string
+            404:
+                description: Mengembalikan pesan error ketika id user tidak ditemukan
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                message:
+                                    description: pesan error
+                                    type: string
+            500:
+                description: Mengembalikan pesan error jika terjadi error yang tidak terduga
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                message:
+                                    description: pesan error
+                                    type: string
+
+    delete:
+        description: Route untuk admin mendelete user lain
+        security:
+            - cookieAuth: []
+        parameters:
+            - name: id
+              description: id user yang ingin dihapus
+              in: path
+              required: true
+        requestBody:
+            content:
+                application/json:
+                    schema:
+                        type: object
+                        required: ['password']
+                        properties:
+                            password:
+                                description: konfirmasi password admin
+                                type: string
+        responses:
+            200:
+                description: Mengembalikan pesan berhasil ketika user dihapus
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                message:
+                                    description: pesan sukses
+                                    type: string
+            401:
+                description: Mengembalikan pesan error ketika password yang di input salah
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                message:
+                                    description: pesan error
+                                    type: string
+            403:
+                description: Mengembalikan pesan error ketika user tidak terautentikasi
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                message:
+                                    description: pesan error
+                                    type: string
+            404:
+                description: Mengembalikan pesan error ketika user dengan id yang di input tidak ditemukan
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                message:
+                                    description: pesan error
+                                    type: string
+            500:
+                description: Mengembalikan pesan error jika terjadi error yang tidak terduga
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                message:
+                                    description: pesan error
+                                    type: string
+
+/api/user/logout:
+    get:
+        description: Route untuk user logout dari session
+        responses:
+            200:
+                description: me-logout user yang terautentikasi
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                message:
+                                    description: pesan sukses
+                                    type: string
+
+/api/user/register:
+    post:
+        description: Route untuk register user
+        security:
+            - cookieAuth: []
+        requestBody:
+            content:
+                application/json:
+                    schema:
+                        type: object
+                        required:
+                            [
+                                'name',
+                                'email',
+                                'password',
+                                'repeatPassword',
+                                'role',
+                            ]
+                        properties:
+                            name:
+                                description: Nama dari user
+                                type: string
+                            email:
+                                description: Email dari user
+                                type: string
+                            password:
+                                description: Password dari user
+                                type: string
+                            repeatPassword:
+                                description: Pengulangan password dari password user
+                                type: string
+                            role:
+                                description: Role user (user / organization / admin)
+                                type: string
+                            facultyId:
+                                description: Id dari fakultas
+                                type: integer
+                                format: int32
+                            nim:
+                                description: nim dari mahasiswa
+                                type: string
+                            level:
+                                description: tingkatan ormawa (faculty / university)
+                                type: string
+                            description:
+                                description: deskripsi ormawa
+                                type: string
+        responses:
+            200:
+                description: Mengembalikan pesan ketika user berhasil disimpan
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                message:
+                                    description: pesan sukses
+                                    type: string
+            400:
+                description: Mengembalikan pesan error ketika terjadi kesalahan validasi
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                message:
+                                    description: pesan error
+                                    type: string
+            403:
+                description: Mengembalikan pesan error jika user tidak memiliki izin untuk membuat ormawa atau akun admin
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                message:
+                                    description: pesan error
+                                    type: string
+            404:
+                description: Mengembalikan pesan error jika fakultas tidak ditemukan
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                message:
+                                    description: pesan error
+                                    type: string
+            500:
+                description: Mengembalikan pesan error jika terjadi error yang tidak terduga
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                message:
+                                    description: pesan error
+                                    type: string
+
+/api/user/login:
+    post:
+        description: Route untuk login user
+        requestBody:
+            content:
+                application/json:
+                    schema:
+                        type: object
+                        required: ['email', 'password']
+                        properties:
+                            email:
+                                description: email user
+                                type: string
+                            password:
+                                description: password user
+                                type: string
+        responses:
+            200:
+                description: Mengembalikan pesan user berhasil log in dan memberikan cookie untuk session
+                headers:
+                    Set-Cookie:
+                        schema:
+                            type: string
+                            example: JSESSIONID=eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNjM1MzEyNjM5LCJleHAiOjE2Mzc5MDQ2Mzl9.iLh-F-hTbeRU22lIRodX-YnSjMTiO0-ywl8mVdHPuMjisKwdysaiq2LLH6MHZ4sQRJ-C0NWbkLW3RWOzxt9_oQ; Path=/; Expires=Fri, 26 Nov 2021 05:30:39 GMT; HttpOnly
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                message:
+                                    description: pesan sukses ketika user berhasil login
+                                    type: string
+            400:
+                description: Mengembalikan pesan error ketika terjadi kesalahan pada validasi inputan
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                message:
+                                    description: pesan error
+                                    type: string
+            401:
+                description: Mengembalikan pesan error ketika password yang di input salah
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                message:
+                                    description: pesan error
+                                    type: string
+            404:
+                description: Mengembalikan pesan error ketika user dengan email yang di input tidak ditemukan
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                message:
+                                    description: pesan error
+                                    type: string
+            500:
+                description: Mengembalikan pesan error jika terjadi error yang tidak terduga
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                message:
+                                    description: pesan error
+                                    type: string
+
+/api/user/upload:
+    post:
+        description: Route untuk user menambahkan atau mengganti foto profile
+        security:
+            - cookieAuth: []
+        requestBody:
+            content:
+                multipart/form-data:
+                    schema:
+                        type: object
+                        properties:
+                            profile:
+                                type: string
+                                format: binary
+        responses:
+            200:
+                description: Mengembalikan path gambar
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                path:
+                                    description: path gambar
+                                    type: string
+            400:
+                description: Mengembalikan pesan error ketika gambar tidak ada
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                message:
+                                    description: pesan error
+                                    type: string
+            403:
+                description: Mengembalikan pesan error ketika user tidak terautentikasi
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                message:
+                                    description: pesan error
+                                    type: string
+            500:
+                description: Mengembalikan pesan error jika terjadi error yang tidak terduga
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                message:
+                                    description: pesan error
+                                    type: string

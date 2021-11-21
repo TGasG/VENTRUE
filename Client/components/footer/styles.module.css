@@ -1,0 +1,28 @@
+.top {
+    background-color: #0f292f;
+    color: white;
+    padding: 50px;
+    display: grid;
+    grid-template-columns: 260px 260px 260px;
+    justify-content: space-between;
+}
+.down {
+    height: 60px;
+    text-align: center;
+    padding: 20px 0px;
+}
+
+.title {
+    font-size: 36px;
+}
+.desc {
+    text-align: justify;
+}
+
+.footer {
+    margin-top: 100px;
+    position: relative;
+    bottom: 0;
+    width: 100%;
+    background-color: #f0f0f0;
+}

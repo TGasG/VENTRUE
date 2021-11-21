@@ -1,0 +1,28 @@
+.input {
+    border-radius: 5px;
+    font-size: 20px;
+    text-indent: 10px;
+    width: 440px;
+    height: 50px;
+    outline: none;
+    resize: none;
+    appearance: none;
+}
+
+.wrapper {
+    width: fit-content;
+    height: fit-content;
+}
+
+.label {
+    font-size: 20px;
+    display: block;
+}
+
+.active {
+    border: 2px solid #14a098;
+}
+
+.notActive {
+    border: 2px solid #ababab;
+}

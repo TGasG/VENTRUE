@@ -1,0 +1,274 @@
+components:
+    securitySchemes:
+        cookieAuth:
+            type: apiKey
+            in: cookie
+            name: JSESSIONID
+
+/api/category:
+    get:
+        description: Route untuk mengambil seluruh category
+        responses:
+            200:
+                description: Mengembalikan seluruh category yang ada
+                content:
+                    application/json:
+                        schema:
+                            type: array
+                            items:
+                                type: object
+                                properties:
+                                    id:
+                                        description: id category
+                                        type: integer
+                                        format: int32
+                                    name:
+                                        description: nama category
+                                        type: string
+                            example:
+                                - id: 1
+                                  name: webinar
+                                - id: 2
+                                  name: offline
+                                - id: 3
+                                  name: online
+                                - id: 4
+                                  name: workshop
+            500:
+                description: Mengembalikan pesan error jika terjadi error yang tidak terduga
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                message:
+                                    description: pesan error
+                                    type: string
+    post:
+        description: Route untuk admin menambahkan category
+        security:
+            - cookieAuth: []
+        requestBody:
+            content:
+                application/json:
+                    schema:
+                        type: object
+                        required: ['name']
+                        properties:
+                            name:
+                                description: nama category
+                                type: string
+        responses:
+            200:
+                description: Mengembalikan pesan category berhasil disimpan
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                message:
+                                    description: pesan sukses
+                                    type: string
+                            example:
+                                message: Category saved
+            400:
+                description: Mengembalikan pesan error jika name kosong atau fakultas sudah pernah terdaftar
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                message:
+                                    description: pesan error
+                                    type: string
+            403:
+                description: Mengembalikan pesan error ketika user tidak terautentikasi atau tidak memiliki izin
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                message:
+                                    description: pesan error
+                                    type: string
+            500:
+                description: Mengembalikan pesan error jika terjadi error yang tidak terduga
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                message:
+                                    description: pesan error
+                                    type: string
+
+/api/category/{id}:
+    get:
+        description: Route untuk mengambil category berdasarkan ID
+        parameters:
+            - name: id
+              in: path
+        responses:
+            200:
+                description: Mengembalikan category dengan parameter id
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                id:
+                                    description: id category
+                                    type: integer
+                                    format: int32
+                                name:
+                                    description: nama category
+                                    type: string
+                            example:
+                                id: 1
+                                name: webinar
+            404:
+                description: Mengembalikan pesan tidak menemukan category dari id yang di request
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                message:
+                                    description: pesan error
+                                    type: string
+            500:
+                description: Mengembalikan pesan error jika terjadi error yang tidak terduga
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                message:
+                                    description: pesan error
+                                    type: string
+    put:
+        description: Route untuk admin mengupdate category berdasarkan ID
+        security:
+            - cookieAuth: []
+        parameters:
+            - name: id
+              in: path
+        requestBody:
+            content:
+                application/json:
+                    schema:
+                        type: object
+                        required: ['name']
+                        properties:
+                            name:
+                                description: nama category
+                                type: string
+        responses:
+            200:
+                description: Mengembalikan pesan category berhasil diupdate
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                message:
+                                    description: pesan sukses
+                                    type: string
+            400:
+                description: Mengembalikan pesan error jika name atau id kosong
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                message:
+                                    description: pesan error
+                                    type: string
+            403:
+                description: Mengembalikan pesan error ketika user tidak terautentikasi atau tidak memiliki izin
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                message:
+                                    description: pesan error
+                                    type: string
+            404:
+                description: Mengembalikan pesan tidak menemukan category dari id yang di request
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                message:
+                                    description: pesan error
+                                    type: string
+            500:
+                description: Mengembalikan pesan error jika terjadi error yang tidak terduga
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                message:
+                                    description: pesan error
+                                    type: string
+    delete:
+        description: Route untuk admin mendelete category berdasarkan ID
+        security:
+            - cookieAuth: []
+        parameters:
+            - name: id
+              in: path
+        responses:
+            200:
+                description: Mengembalikan pesan category berhasil di delete
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                message:
+                                    description: pesan sukses
+                                    type: string
+            400:
+                description: Mengembalikan pesan error jika id kosong
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                message:
+                                    description: pesan error
+                                    type: string
+            403:
+                description: Mengembalikan pesan error ketika user tidak terautentikasi atau tidak memiliki izin
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                message:
+                                    description: pesan error
+                                    type: string
+            404:
+                description: Mengembalikan pesan tidak menemukan category dari id yang di request
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                message:
+                                    description: pesan error
+                                    type: string
+            500:
+                description: Mengembalikan pesan error jika terjadi error yang tidak terduga
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                message:
+                                    description: pesan error
+                                    type: string

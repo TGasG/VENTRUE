@@ -1,0 +1,19 @@
+.wrapper {
+    height: 450px;
+    width: 300px;
+    border: 2px solid #cb2d6f;
+    background-color: white;
+    border-radius: 5px;
+}
+
+.dropdown {
+    background-color: white;
+    color: #0f292f;
+    border: 1px solid #14a098;
+    border-radius: 5px;
+    font-size: 16px;
+    width: 200px;
+    height: fit-content;
+    display: grid;
+    grid-template-rows: auto;
+}

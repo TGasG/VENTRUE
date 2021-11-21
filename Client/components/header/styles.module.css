@@ -1,0 +1,20 @@
+.header {
+    width: 100%;
+    height: 70px;
+    background-color: #0f292f;
+    color: white;
+    padding: 20px;
+    font-size: 24px;
+}
+
+.dropdown {
+    background-color: white;
+    color: #0f292f;
+    border: 1px solid #14a098;
+    border-radius: 5px;
+    font-size: 16px;
+    width: 200px;
+    height: fit-content;
+    display: grid;
+    grid-template-rows: auto;
+}

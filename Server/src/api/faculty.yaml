@@ -1,0 +1,272 @@
+components:
+    securitySchemes:
+        cookieAuth:
+            type: apiKey
+            in: cookie
+            name: JSESSIONID
+
+/api/faculty:
+    get:
+        description: Route untuk mengambil seluruh faculty
+        responses:
+            200:
+                description: Mengembalikan seluruh faculty yang ada
+                content:
+                    application/json:
+                        schema:
+                            type: array
+                            items:
+                                type: object
+                                properties:
+                                    id:
+                                        description: id faculty
+                                        type: integer
+                                        format: int32
+                                    name:
+                                        description: nama faculty
+                                        type: string
+                                    createdAt:
+                                        description: tanggal data dibuat
+                                        type: string
+                                    updatedAt:
+                                        description: tanggal data terakhir di update
+                                        type: string
+            500:
+                description: Mengembalikan pesan error jika terjadi error yang tidak terduga
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                message:
+                                    description: pesan error
+                                    type: string
+    post:
+        description: Route untuk admin menambahkan faculty
+        security:
+            - cookieAuth: []
+        requestBody:
+            content:
+                application/json:
+                    schema:
+                        type: object
+                        required: ['name']
+                        properties:
+                            name:
+                                description: nama faculty
+                                type: string
+        responses:
+            200:
+                description: Mengembalikan pesan faculty berhasil disimpan
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                message:
+                                    description: pesan sukses
+                                    type: string
+            400:
+                description: Mengembalikan pesan error jika name kosong atau fakultas sudah pernah terdaftar
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                message:
+                                    description: pesan error
+                                    type: string
+            403:
+                description: Mengembalikan pesan error ketika user tidak terautentikasi atau tidak memiliki izin
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                message:
+                                    description: pesan error
+                                    type: string
+            500:
+                description: Mengembalikan pesan error jika terjadi error yang tidak terduga
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                message:
+                                    description: pesan error
+                                    type: string
+
+/api/faculty/{id}:
+    get:
+        description: Route untuk mengambil faculty berdasarkan ID
+        parameters:
+            - name: id
+              in: path
+        responses:
+            200:
+                description: Mengembalikan faculty dengan parameter id
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                id:
+                                    description: id faculty
+                                    type: integer
+                                    format: int32
+                                name:
+                                    description: nama faculty
+                                    type: string
+                                createdAt:
+                                    description: tanggal data dibuat
+                                    type: string
+                                updatedAt:
+                                    description: tanggal data terakhir di update
+                                    type: string
+            404:
+                description: Mengembalikan pesan tidak menemukan faculty dari id yang di request
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                message:
+                                    description: pesan error
+                                    type: string
+            500:
+                description: Mengembalikan pesan error jika terjadi error yang tidak terduga
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                message:
+                                    description: pesan error
+                                    type: string
+    put:
+        description: Route untuk admin mengupdate faculty berdasarkan ID
+        security:
+            - cookieAuth: []
+        parameters:
+            - name: id
+              in: path
+        requestBody:
+            content:
+                application/json:
+                    schema:
+                        type: object
+                        required: ['name']
+                        properties:
+                            name:
+                                description: nama faculty
+                                type: string
+        responses:
+            200:
+                description: Mengembalikan pesan faculty berhasil diupdate
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                message:
+                                    description: pesan sukses
+                                    type: string
+            400:
+                description: Mengembalikan pesan error jika name atau id kosong
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                message:
+                                    description: pesan error
+                                    type: string
+            403:
+                description: Mengembalikan pesan error ketika user tidak terautentikasi atau tidak memiliki izin
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                message:
+                                    description: pesan error
+                                    type: string
+            404:
+                description: Mengembalikan pesan tidak menemukan faculty dari id yang di request
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                message:
+                                    description: pesan error
+                                    type: string
+            500:
+                description: Mengembalikan pesan error jika terjadi error yang tidak terduga
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                message:
+                                    description: pesan error
+                                    type: string
+    delete:
+        description: Route untuk admin mendelete faculty berdasarkan ID
+        security:
+            - cookieAuth: []
+        parameters:
+            - name: id
+              in: path
+        responses:
+            200:
+                description: Mengembalikan pesan faculty berhasil di delete
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                message:
+                                    description: pesan sukses
+                                    type: string
+            400:
+                description: Mengembalikan pesan error jika id kosong
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                message:
+                                    description: pesan error
+                                    type: string
+            403:
+                description: Mengembalikan pesan error ketika user tidak terautentikasi atau tidak memiliki izin
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                message:
+                                    description: pesan error
+                                    type: string
+            404:
+                description: Mengembalikan pesan tidak menemukan faculty dari id yang di request
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                message:
+                                    description: pesan error
+                                    type: string
+            500:
+                description: Mengembalikan pesan error jika terjadi error yang tidak terduga
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                message:
+                                    description: pesan error
+                                    type: string
